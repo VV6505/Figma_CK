@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UC1: Đăng nhập - Hệ thống Quản lý Hoạt động Đoàn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+        }
+
+        .login-left {
+            flex: 1;
+            background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+            padding: 60px 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-left h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .login-left p {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .login-left .icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        .login-right {
+            flex: 1;
+            padding: 60px 40px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #e53935;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 57, 53, 0.3);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .remember-forgot label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .remember-forgot input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .remember-forgot a {
+            color: #e53935;
+            text-decoration: none;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+
+            .login-left {
+                padding: 40px 30px;
+            }
+
+            .login-right {
+                padding: 40px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <div class="icon">🎓</div>
+            <h1>Hệ thống Quản lý Hoạt động Đoàn</h1>
+            <p>Nền tảng quản lý và theo dõi các hoạt động đoàn, giúp kết nối đoàn trường và đoàn viên một cách hiệu quả.</p>
+        </div>
+
+        <div class="login-right">
+            <div class="login-header">
+                <h2>Đăng nhập</h2>
+                <p>Chào mừng bạn quay trở lại</p>
+            </div>
+
+            <div id="alert" class="alert"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="role">Vai trò</label>
+                    <select id="role" required>
+                        <option value="">-- Chọn vai trò --</option>
+                        <option value="admin">Đoàn trường</option>
+                        <option value="member">Đoàn viên</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Tên đăng nhập</label>
+                    <input type="text" id="username" placeholder="Nhập tên đăng nhập" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+                </div>
+
+                <div class="remember-forgot">
+                    <label>
+                        <input type="checkbox" id="remember">
+                        Ghi nhớ đăng nhập
+                    </label>
+                    <a href="#">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="btn-login">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu mẫu
+        const users = {
+            admin: {
+                username: 'admin',
+                password: 'admin123',
+                name: 'Đoàn trường'
+            },
+            member: {
+                username: 'member',
+                password: 'member123',
+                name: 'Đoàn viên'
+            }
+        };
+
+        const loginForm = document.getElementById('loginForm');
+        const alertBox = document.getElementById('alert');
+
+        function showAlert(message, type) {
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.style.display = 'block';
+
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const role = document.getElementById('role').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!role) {
+                showAlert('Vui lòng chọn vai trò!', 'error');
+                return;
+            }
+
+            const user = users[role];
+
+            if (username === user.username && password === user.password) {
+                showAlert('Đăng nhập thành công! Đang chuyển hướng...', 'success');
+                
+                // Lưu thông tin đăng nhập
+                const loginData = {
+                    role: role,
+                    username: username,
+                    name: user.name,
+                    loginTime: new Date().toISOString()
+                };
+
+                // Hiển thị thông tin trong console
+                console.log('Đăng nhập thành công:', loginData);
+
+                setTimeout(() => {
+                    // Chuyển hướng dựa trên vai trò
+                    if (role === 'admin') {
+                        alert('Chuyển đến trang Quản lý hoạt động');
+                        window.location.href = 'pageCapNhatHoatDong.html';
+                    } else {
+                        alert('Chuyển đến trang Đăng ký hoạt động');
+                        window.location.href = 'pageDangKyHoatDong.html';
+                    }
+                }, 1500);
+            } else {
+                showAlert('Tên đăng nhập hoặc mật khẩu không đúng!', 'error');
+            }
+        });
+
+        // Hiển thị gợi ý đăng nhập
+        document.getElementById('role').addEventListener('change', function() {
+            const role = this.value;
+            if (role === 'admin') {
+                console.log('Gợi ý: admin / admin123');
+            } else if (role === 'member') {
+                console.log('Gợi ý: member / member123');
+            }
+        });
+    </script>
+</body>
+</html>
